@@ -7,6 +7,8 @@ import com.apus.demo.mapper.GroupAllowanceMapper;
 import com.apus.demo.repository.GroupAllowanceRepository;
 import com.apus.demo.service.GroupAllowanceService;
 import com.apus.demo.repository.specification.GroupAllowanceSpecification;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +28,7 @@ public class GroupAllowanceServiceImpl implements GroupAllowanceService {
 
     @Override
     @Transactional
-    public Long addGroupAllowance(GroupAllowanceDto groupAllowanceDto) {
+    public Object addGroupAllowance(GroupAllowanceDto groupAllowanceDto) {
         log.info("Adding new group allowance with code: {}", groupAllowanceDto.getCode());
 
         GroupAllowanceEntity groupAllowance = groupAllowanceMapper.toGroupAllowance(groupAllowanceDto);
@@ -34,7 +36,11 @@ public class GroupAllowanceServiceImpl implements GroupAllowanceService {
         groupAllowanceRepository.save(groupAllowance);
         log.info("Successfully added group allowance with id: {}", groupAllowance.getId());
 
-        return groupAllowance.getId();
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode node = mapper.createObjectNode();
+        node.put("id", groupAllowance.getId());
+
+        return node;
     }
 
     @Override
@@ -72,7 +78,7 @@ public class GroupAllowanceServiceImpl implements GroupAllowanceService {
 
     @Override
     @Transactional
-    public void updateGroupAllowance(GroupAllowanceDto groupAllowanceDto) {
+    public Object updateGroupAllowance(GroupAllowanceDto groupAllowanceDto) {
         Long id = groupAllowanceDto.getId();
 
         log.info("Updating group allowance with id: {}", id);
@@ -91,6 +97,12 @@ public class GroupAllowanceServiceImpl implements GroupAllowanceService {
         
         groupAllowanceRepository.save(existingGroupAllowance);
         log.info("Successfully updated group allowance with id: {}", id);
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode node = mapper.createObjectNode();
+        node.put("id", id);
+
+        return node;
     }
 
     @Override

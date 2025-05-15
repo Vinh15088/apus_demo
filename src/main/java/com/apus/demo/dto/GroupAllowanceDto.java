@@ -19,7 +19,7 @@ public class GroupAllowanceDto {
     @Size(min = 3, max = 255)
     private String name;
 
-    private Object parent;
+    private CommonDto parent;
 
     private String description;
 

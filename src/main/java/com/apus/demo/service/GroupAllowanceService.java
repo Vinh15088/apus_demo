@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 
 
 public interface GroupAllowanceService {
-    Long addGroupAllowance(GroupAllowanceDto groupAllowanceDto);
+    Object addGroupAllowance(GroupAllowanceDto groupAllowanceDto);
     GroupAllowanceDto getGroupAllowance(Long id);
     Page<GroupAllowanceDto> searchGroupAllowances(GroupAllowanceSearchCriteria criteria, Pageable pageable);
-    void updateGroupAllowance(GroupAllowanceDto groupAllowanceDto);
+    Object updateGroupAllowance(GroupAllowanceDto groupAllowanceDto);
     void deleteGroupAllowance(Long id);
 }

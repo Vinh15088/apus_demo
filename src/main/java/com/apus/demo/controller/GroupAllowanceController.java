@@ -39,13 +39,9 @@ public class GroupAllowanceController {
 
         log.info("Creating group allowance: {}", groupAllowanceDto);
 
-        Long id = groupAllowanceService.addGroupAllowance(groupAllowanceDto);
+        Object object =  groupAllowanceService.addGroupAllowance(groupAllowanceDto);
 
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode node = mapper.createObjectNode();
-        node.put("id", id);
-
-        return BaseResponse.success(node);
+        return BaseResponse.success(object);
     }
 
     @GetMapping()
@@ -68,7 +64,7 @@ public class GroupAllowanceController {
 
         int page = request.getPage() == null ? 0 : request.getPage();
         int size = request.getSize() == null ? 20 : request.getSize();
-        String sortBy = request.getSort() == null ? "createdAt" : request.getSort();
+        String sortBy = request.getSort() == null ? "id" : request.getSort();
         String sortDirection = request.getSortDirection() == null ? "DESC" : request.getSortDirection();
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
@@ -86,13 +82,9 @@ public class GroupAllowanceController {
 
         log.info("Updating group allowance with id: {}", groupAllowanceDto.getId());
 
-        groupAllowanceService.updateGroupAllowance(groupAllowanceDto);
+        Object object = groupAllowanceService.updateGroupAllowance(groupAllowanceDto);
 
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode node = mapper.createObjectNode();
-        node.put("id", groupAllowanceDto.getId());
-
-        return BaseResponse.success(node);
+        return BaseResponse.success(object);
     }
 
     @DeleteMapping
