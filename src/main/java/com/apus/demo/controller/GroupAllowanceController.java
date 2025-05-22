@@ -1,13 +1,12 @@
 package com.apus.demo.controller;
 
+import com.apus.demo.dto.CommonDto;
+import com.apus.demo.dto.CommonSearchCriteria;
 import com.apus.demo.dto.GroupAllowanceDto;
-import com.apus.demo.dto.GroupAllowanceSearchCriteria;
-import com.apus.demo.dto.request.GroupAllowanceSearchRequest;
+import com.apus.demo.dto.request.CommonSearchRequest;
 import com.apus.demo.dto.response.BaseResponse;
 import com.apus.demo.dto.response.PageResponse;
 import com.apus.demo.service.GroupAllowanceService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -35,13 +34,11 @@ public class GroupAllowanceController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(method = "POST", summary = "Create a new group allowance")
-    public BaseResponse<Object> createGroupAllowance(@Valid @RequestBody GroupAllowanceDto groupAllowanceDto) {
+    public BaseResponse<CommonDto> createGroupAllowance(@Valid @RequestBody GroupAllowanceDto groupAllowanceDto) {
 
         log.info("Creating group allowance: {}", groupAllowanceDto);
 
-        Object object =  groupAllowanceService.addGroupAllowance(groupAllowanceDto);
-
-        return BaseResponse.success(object);
+        return BaseResponse.success(groupAllowanceService.createGroupAllowance(groupAllowanceDto));
     }
 
     @GetMapping()
@@ -56,11 +53,11 @@ public class GroupAllowanceController {
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     @Operation(method = "GET", summary = "Get all group allowances with pagination")
-    public BaseResponse<PageResponse<GroupAllowanceDto>> searchGroupAllowances(@ParameterObject GroupAllowanceSearchRequest request) {
+    public BaseResponse<PageResponse<GroupAllowanceDto>> getListGroupAllowances(@ParameterObject CommonSearchRequest request) {
 
         log.info("Get all or searching group allowances with criteria: {}", request);
 
-        GroupAllowanceSearchCriteria criteria = request.toGroupAllowanceSearchCriteria();
+        CommonSearchCriteria criteria = request.toCommonSearchCriteria();
 
         int page = request.getPage() == null ? 0 : request.getPage();
         int size = request.getSize() == null ? 20 : request.getSize();
@@ -68,7 +65,7 @@ public class GroupAllowanceController {
         String sortDirection = request.getSortDirection() == null ? "DESC" : request.getSortDirection();
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
-        Page<GroupAllowanceDto> groupAllowancePage = groupAllowanceService.searchGroupAllowances(
+        Page<GroupAllowanceDto> groupAllowancePage = groupAllowanceService.getListGroupAllowances(
             criteria,
             PageRequest.of(page, size, sort)
         );
@@ -78,13 +75,13 @@ public class GroupAllowanceController {
 
     @PutMapping
     @Operation(method = "PUT", summary = "Update a group allowance")
-    public BaseResponse<Object> updateGroupAllowance(@Valid @RequestBody GroupAllowanceDto groupAllowanceDto) {
+    public BaseResponse<CommonDto> updateGroupAllowance(@Valid @RequestBody GroupAllowanceDto groupAllowanceDto) {
 
         log.info("Updating group allowance with id: {}", groupAllowanceDto.getId());
 
-        Object object = groupAllowanceService.updateGroupAllowance(groupAllowanceDto);
+        CommonDto commonDto = groupAllowanceService.updateGroupAllowance(groupAllowanceDto);
 
-        return BaseResponse.success(object);
+        return BaseResponse.success(commonDto);
     }
 
     @DeleteMapping

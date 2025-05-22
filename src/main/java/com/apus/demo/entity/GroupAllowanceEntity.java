@@ -11,7 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class GroupAllowanceEntity extends AbstractEntity<Long> {
+@Table(name = "group_allowance")
+public class GroupAllowanceEntity extends AbstractEntity<Long> implements IdentifiableEntity {
 
     @Column(name = "code", length = 20, nullable = false)
     private String code;
