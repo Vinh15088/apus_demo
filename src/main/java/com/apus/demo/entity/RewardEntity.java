@@ -1,7 +1,7 @@
 package com.apus.demo.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import com.apus.demo.util.enums.AllowanceRewardType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class RewardEntity extends AbstractEntity<Long> {
+@Table(name = "reward")
+public class RewardEntity extends AbstractEntity<Long> implements IdentifiableEntity {
 
     @Column(name = "code", length = 20, nullable = false)
     private String code;
@@ -24,17 +25,19 @@ public class RewardEntity extends AbstractEntity<Long> {
     private String includeType;
 
     @Column(name = "type", length = 55)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private AllowanceRewardType type;
 
     private Long uomId;
 
     private Long currencyId;
 
-    private Long groupAllowanceId;
+    private Long groupRewardId;
 
     @Column(name = "description" )
     private String description;
 
-    @Column(name = "status" , length = 55)
-    private String status;
+    @Column(name = "is_active" , length = 55)
+    private Boolean isActive;
+
 }
