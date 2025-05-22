@@ -7,6 +7,7 @@ import com.apus.demo.dto.request.CommonSearchRequest;
 import com.apus.demo.dto.response.BaseResponse;
 import com.apus.demo.dto.response.PageResponse;
 import com.apus.demo.service.GroupRewardService;
+import com.apus.demo.util.MessageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class GroupRewardController {
 
     private final GroupRewardService groupRewardService;
+    private final MessageUtil messageUtil;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -37,7 +39,8 @@ public class GroupRewardController {
 
         log.info("Creating group reward: {}", groupRewardDto);
 
-        return BaseResponse.success(groupRewardService.createGroupReward(groupRewardDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                groupRewardService.createGroupReward(groupRewardDto));
     }
 
     @GetMapping()
@@ -46,7 +49,8 @@ public class GroupRewardController {
     public BaseResponse<GroupRewardDto> getGroupReward(@RequestParam Long id) {
         log.info("Fetching group reward with id: {}", id);
 
-        return BaseResponse.success(groupRewardService.getGroupReward(id));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                groupRewardService.getGroupReward(id));
     }
 
     @GetMapping("/list")
@@ -69,7 +73,8 @@ public class GroupRewardController {
                 PageRequest.of(page, size, sort)
         );
 
-        return BaseResponse.success(PageResponse.from(groupRewardPage));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                PageResponse.from(groupRewardPage));
     }
 
     @PutMapping
@@ -78,7 +83,8 @@ public class GroupRewardController {
 
         log.info("Updating group reward with id: {}", groupRewardDto.getId());
 
-        return BaseResponse.success(groupRewardService.updateGroupReward(groupRewardDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                groupRewardService.updateGroupReward(groupRewardDto));
     }
 
     @DeleteMapping
@@ -89,6 +95,6 @@ public class GroupRewardController {
 
         groupRewardService.deleteGroupReward(id);
 
-        return BaseResponse.success(null);
+        return BaseResponse.success(messageUtil.getMessage("response.success"), null);
     }
 }

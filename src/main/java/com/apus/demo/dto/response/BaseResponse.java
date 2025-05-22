@@ -14,8 +14,8 @@ public class BaseResponse<T> {
     private String traceId;
     private T data;
 
-    public static <T> BaseResponse<T> success(T data) {
-        return new BaseResponse<>("Thành công", java.util.UUID.randomUUID().toString(), data);
+    public static <T> BaseResponse<T> success(String message, T data) {
+        return new BaseResponse<>(message, java.util.UUID.randomUUID().toString(), data);
     }
 
     public static <T> BaseResponse<T> error(String message) {

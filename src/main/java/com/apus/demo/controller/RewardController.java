@@ -5,6 +5,7 @@ import com.apus.demo.dto.request.CommonSearchRequest;
 import com.apus.demo.dto.response.BaseResponse;
 import com.apus.demo.dto.response.PageResponse;
 import com.apus.demo.service.RewardService;
+import com.apus.demo.util.MessageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class RewardController {
 
     private final RewardService rewardService;
+    private final MessageUtil messageUtil;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -34,7 +36,8 @@ public class RewardController {
     public BaseResponse<CommonDto> createReward(@Valid @RequestBody RewardDto rewardDto) {
         log.info("Creating reward: {}", rewardDto);
 
-        return BaseResponse.success(rewardService.createReward(rewardDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                rewardService.createReward(rewardDto));
     }
 
     @GetMapping
@@ -43,7 +46,8 @@ public class RewardController {
     public BaseResponse<RewardDto> getReward(@RequestParam Long id) {
         log.info("Fetching reward with id: {}", id);
 
-        return BaseResponse.success(rewardService.getReward(id));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                rewardService.getReward(id));
     }
 
     @GetMapping("/list")
@@ -62,7 +66,8 @@ public class RewardController {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         Page<RewardListDto> rewardPage = rewardService.getListRewards(criteria, PageRequest.of(page, size, sort));
 
-        return BaseResponse.success(PageResponse.from(rewardPage));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                PageResponse.from(rewardPage));
     }
 
     @PutMapping
@@ -70,7 +75,8 @@ public class RewardController {
     public BaseResponse<CommonDto> updateReward(@Valid @RequestBody RewardDto rewardDto) {
         log.info("Updating reward with id: {}", rewardDto.getId());
 
-        return BaseResponse.success(rewardService.updateReward(rewardDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                rewardService.updateReward(rewardDto));
     }
 
     @DeleteMapping
@@ -80,6 +86,6 @@ public class RewardController {
 
         rewardService.deleteReward(id);
 
-        return BaseResponse.success(null);
+        return BaseResponse.success(messageUtil.getMessage("response.success"), null);
     }
 }

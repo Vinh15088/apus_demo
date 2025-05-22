@@ -7,6 +7,7 @@ import com.apus.demo.dto.request.CommonSearchRequest;
 import com.apus.demo.dto.response.BaseResponse;
 import com.apus.demo.dto.response.PageResponse;
 import com.apus.demo.service.GroupAllowanceService;
+import com.apus.demo.util.MessageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 public class GroupAllowanceController {
 
     private final GroupAllowanceService groupAllowanceService;
+    private final MessageUtil messageUtil;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -38,7 +40,8 @@ public class GroupAllowanceController {
 
         log.info("Creating group allowance: {}", groupAllowanceDto);
 
-        return BaseResponse.success(groupAllowanceService.createGroupAllowance(groupAllowanceDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                groupAllowanceService.createGroupAllowance(groupAllowanceDto));
     }
 
     @GetMapping()
@@ -47,7 +50,8 @@ public class GroupAllowanceController {
     public BaseResponse<GroupAllowanceDto> getGroupAllowance(@RequestParam Long id) {
         log.info("Fetching group allowance with id: {}", id);
 
-        return BaseResponse.success(groupAllowanceService.getGroupAllowance(id));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                groupAllowanceService.getGroupAllowance(id));
     }
 
     @GetMapping("/list")
@@ -70,7 +74,8 @@ public class GroupAllowanceController {
             PageRequest.of(page, size, sort)
         );
 
-        return BaseResponse.success(PageResponse.from(groupAllowancePage));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                PageResponse.from(groupAllowancePage));
     }
 
     @PutMapping
@@ -79,9 +84,8 @@ public class GroupAllowanceController {
 
         log.info("Updating group allowance with id: {}", groupAllowanceDto.getId());
 
-        CommonDto commonDto = groupAllowanceService.updateGroupAllowance(groupAllowanceDto);
-
-        return BaseResponse.success(commonDto);
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                groupAllowanceService.updateGroupAllowance(groupAllowanceDto));
     }
 
     @DeleteMapping
@@ -92,6 +96,6 @@ public class GroupAllowanceController {
 
         groupAllowanceService.deleteGroupAllowance(id);
 
-        return BaseResponse.success(null);
+        return BaseResponse.success(messageUtil.getMessage("response.success"), null);
     }
 } 

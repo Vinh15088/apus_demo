@@ -5,6 +5,7 @@ import com.apus.demo.dto.request.RewardPolicySearchRequest;
 import com.apus.demo.dto.response.BaseResponse;
 import com.apus.demo.dto.response.PageResponse;
 import com.apus.demo.service.RewardPolicyService;
+import com.apus.demo.util.MessageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class RewardPolicyController {
 
     private final RewardPolicyService rewardPolicyService;
+    private final MessageUtil messageUtil;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -34,7 +36,8 @@ public class RewardPolicyController {
     public BaseResponse<CommonDto> createRewardPolicy(@Valid @RequestBody RewardPolicyDto rewardPolicyDto) {
         log.info("Creating reward policy");
 
-        return BaseResponse.success(rewardPolicyService.createRewardPolicy(rewardPolicyDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                rewardPolicyService.createRewardPolicy(rewardPolicyDto));
     }
 
     @GetMapping
@@ -43,7 +46,8 @@ public class RewardPolicyController {
     public BaseResponse<RewardPolicyDto> getRewardPolicy(@RequestParam Long id) {
         log.info("Fetching reward policy with id: {}", id);
 
-        return BaseResponse.success(rewardPolicyService.getRewardPolicy(id));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                rewardPolicyService.getRewardPolicy(id));
     }
 
     @GetMapping("/list")
@@ -63,7 +67,8 @@ public class RewardPolicyController {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         Page<RewardPolicyListDto> rewardPolicyPage = rewardPolicyService.getListRewardPolicy(criteria, PageRequest.of(page, size, sort));
 
-        return BaseResponse.success(PageResponse.from(rewardPolicyPage));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                PageResponse.from(rewardPolicyPage));
     }
 
     @PutMapping
@@ -72,7 +77,8 @@ public class RewardPolicyController {
     public BaseResponse<CommonDto> updateRewardPolicy(@Valid @RequestBody RewardPolicyDto rewardPolicyDto) {
         log.info("Updating reward policy with id: {}", rewardPolicyDto.getId());
 
-        return BaseResponse.success(rewardPolicyService.updateRewardPolicy(rewardPolicyDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                rewardPolicyService.updateRewardPolicy(rewardPolicyDto));
     }
 
     @DeleteMapping
@@ -83,6 +89,6 @@ public class RewardPolicyController {
 
         rewardPolicyService.deleteRewardPolicy(id);
 
-        return BaseResponse.success(null);
+        return BaseResponse.success(messageUtil.getMessage("response.success"), null);
     }
 }

@@ -8,6 +8,7 @@ import com.apus.demo.dto.request.PayrollSearchRequest;
 import com.apus.demo.dto.response.BaseResponse;
 import com.apus.demo.dto.response.PageResponse;
 import com.apus.demo.service.PayrollService;
+import com.apus.demo.util.MessageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 public class PayrollController {
 
     private final PayrollService payrollService;
+    private final MessageUtil messageUtil;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -37,7 +39,8 @@ public class PayrollController {
     public BaseResponse<CommonDto> createPayroll(@Valid @RequestBody PayrollDto payrollDto) {
         log.info("Creating new payroll");
 
-        return BaseResponse.success(payrollService.createPayroll(payrollDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                payrollService.createPayroll(payrollDto));
     }
 
     @GetMapping
@@ -46,7 +49,8 @@ public class PayrollController {
     public BaseResponse<PayrollDto> getPayroll(@RequestParam Long id) {
         log.info("Fetching payroll with id: {}", id);
 
-        return BaseResponse.success(payrollService.getPayroll(id));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                payrollService.getPayroll(id));
     }
 
     @GetMapping("/list")
@@ -65,7 +69,8 @@ public class PayrollController {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         Page<PayrollListDto> payrollPage = payrollService.getListPayrolls(criteria, PageRequest.of(page, size, sort));
 
-        return BaseResponse.success(PageResponse.from(payrollPage));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                PageResponse.from(payrollPage));
     }
 
     @PutMapping
@@ -74,7 +79,8 @@ public class PayrollController {
     public BaseResponse<CommonDto> updatePayroll(@Valid @RequestBody PayrollDto payrollDto) {
         log.info("Updating payroll with id: {}", payrollDto.getId());
 
-        return BaseResponse.success(payrollService.updatePayroll(payrollDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                payrollService.updatePayroll(payrollDto));
     }
 
     @DeleteMapping
@@ -85,6 +91,6 @@ public class PayrollController {
 
         payrollService.deletePayroll(id);
 
-        return BaseResponse.success(null);
+        return BaseResponse.success(messageUtil.getMessage("response.success"), null);
     }
 }

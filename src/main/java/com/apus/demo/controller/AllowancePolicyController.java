@@ -5,6 +5,7 @@ import com.apus.demo.dto.request.AllowancePolicySearchRequest;
 import com.apus.demo.dto.response.BaseResponse;
 import com.apus.demo.dto.response.PageResponse;
 import com.apus.demo.service.AllowancePolicyService;
+import com.apus.demo.util.MessageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class AllowancePolicyController {
 
     private final AllowancePolicyService allowancePolicyService;
+    private final MessageUtil messageUtil;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -36,7 +38,7 @@ public class AllowancePolicyController {
 
         CommonDto commonDto = allowancePolicyService.createAllowancePolicy(allowancePolicyDto);
 
-        return BaseResponse.success(commonDto);
+        return BaseResponse.success(messageUtil.getMessage("response.success"), commonDto);
     }
 
     @GetMapping
@@ -45,7 +47,8 @@ public class AllowancePolicyController {
     public BaseResponse<AllowancePolicyDto> getAllowancePolicy(@RequestParam Long id) {
         log.info("Fetching allowance policy with id: {}", id);
 
-        return BaseResponse.success(allowancePolicyService.getAllowancePolicy(id));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                allowancePolicyService.getAllowancePolicy(id));
     }
 
     @GetMapping("/list")
@@ -65,7 +68,8 @@ public class AllowancePolicyController {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         Page<AllowancePolicyListDto> allowancePolicyPage = allowancePolicyService.getListAllowancePolicy(criteria, PageRequest.of(page, size, sort));
 
-        return BaseResponse.success(PageResponse.from(allowancePolicyPage));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                PageResponse.from(allowancePolicyPage));
     }
 
     @PutMapping
@@ -74,7 +78,8 @@ public class AllowancePolicyController {
     public BaseResponse<CommonDto> updateAllowancePolicy(@Valid @RequestBody AllowancePolicyDto allowancePolicyDto) {
         log.info("Updating allowance policy with id: {}", allowancePolicyDto.getId());
 
-        return BaseResponse.success(allowancePolicyService.updateAllowancePolicy(allowancePolicyDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                allowancePolicyService.updateAllowancePolicy(allowancePolicyDto));
     }
 
     @DeleteMapping
@@ -85,6 +90,6 @@ public class AllowancePolicyController {
 
         allowancePolicyService.deleteAllowancePolicy(id);
 
-        return BaseResponse.success(null);
+        return BaseResponse.success(messageUtil.getMessage("response.success"), null);
     }
 }

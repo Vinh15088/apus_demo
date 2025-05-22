@@ -8,6 +8,7 @@ import com.apus.demo.dto.request.CommonSearchRequest;
 import com.apus.demo.dto.response.BaseResponse;
 import com.apus.demo.dto.response.PageResponse;
 import com.apus.demo.service.AllowanceService;
+import com.apus.demo.util.MessageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,6 +34,7 @@ import java.util.Set;
 public class AllowanceController {
 
     private final AllowanceService allowanceService;
+    private final MessageUtil messageUtil;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -40,7 +42,8 @@ public class AllowanceController {
     public BaseResponse<CommonDto> createAllowance(@Valid @RequestBody AllowanceDto allowanceDto) {
         log.info("Creating allowance: {}", allowanceDto);
 
-        return BaseResponse.success(allowanceService.createAllowance(allowanceDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                allowanceService.createAllowance(allowanceDto));
     }
 
     @GetMapping
@@ -49,7 +52,8 @@ public class AllowanceController {
     public BaseResponse<AllowanceDto> getAllowance(@RequestParam Long id) {
         log.info("Fetching allowance with id: {}", id);
 
-        return BaseResponse.success(allowanceService.getAllowance(id));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                allowanceService.getAllowance(id));
     }
 
     @GetMapping("/list")
@@ -68,7 +72,8 @@ public class AllowanceController {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         Page<AllowanceListDto> allowancePage = allowanceService.getListAllowances(criteria, PageRequest.of(page, size, sort));
 
-        return BaseResponse.success(PageResponse.from(allowancePage));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                PageResponse.from(allowancePage));
     }
 
     @GetMapping("list/ids")
@@ -77,7 +82,8 @@ public class AllowanceController {
     public BaseResponse<List<AllowanceDto>> searchAllowancesByIds(@RequestParam Set<Long> ids) {
         log.info("Get all or searching allowances by ids: {}", ids);
 
-        return BaseResponse.success(allowanceService.getMapAllowanceEntityByIds(ids));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                allowanceService.getMapAllowanceEntityByIds(ids));
     }
 
     @PutMapping
@@ -85,7 +91,8 @@ public class AllowanceController {
     public BaseResponse<CommonDto> updateAllowance(@Valid @RequestBody AllowanceDto allowanceDto) {
         log.info("Updating allowance with id: {}", allowanceDto.getId());
 
-        return BaseResponse.success(allowanceService.updateAllowance(allowanceDto));
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                allowanceService.updateAllowance(allowanceDto));
     }
 
     @DeleteMapping
@@ -95,6 +102,7 @@ public class AllowanceController {
 
         allowanceService.deleteAllowance(id);
 
-        return BaseResponse.success(null);
+        return BaseResponse.success(messageUtil.getMessage("response.success"),
+                null);
     }
 }
