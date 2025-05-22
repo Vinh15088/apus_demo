@@ -1,8 +1,9 @@
 package com.apus.demo.controller;
 
+import com.apus.demo.dto.CommonDto;
+import com.apus.demo.dto.CommonSearchCriteria;
 import com.apus.demo.dto.GroupRewardDto;
-import com.apus.demo.dto.GroupRewardSearchCriteria;
-import com.apus.demo.dto.request.GroupRewardSearchRequest;
+import com.apus.demo.dto.request.CommonSearchRequest;
 import com.apus.demo.dto.response.BaseResponse;
 import com.apus.demo.dto.response.PageResponse;
 import com.apus.demo.service.GroupRewardService;
@@ -32,13 +33,11 @@ public class GroupRewardController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(method = "POST", summary = "Create a new group reward")
-    public BaseResponse<Object> createGroupReward(@Valid @RequestBody GroupRewardDto groupRewardDto) {
+    public BaseResponse<CommonDto> createGroupReward(@Valid @RequestBody GroupRewardDto groupRewardDto) {
 
         log.info("Creating group reward: {}", groupRewardDto);
 
-        Object object =  groupRewardService.addGroupReward(groupRewardDto);
-
-        return BaseResponse.success(object);
+        return BaseResponse.success(groupRewardService.createGroupReward(groupRewardDto));
     }
 
     @GetMapping()
@@ -53,11 +52,11 @@ public class GroupRewardController {
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     @Operation(method = "GET", summary = "Get all group rewards with pagination")
-    public BaseResponse<PageResponse<GroupRewardDto>> searchGroupRewards(@ParameterObject GroupRewardSearchRequest request) {
+    public BaseResponse<PageResponse<GroupRewardDto>> getListGroupRewards(@ParameterObject CommonSearchRequest request) {
 
         log.info("Get all or searching group rewards with criteria: {}", request);
 
-        GroupRewardSearchCriteria criteria = request.toGroupRewardSearchCriteria();
+        CommonSearchCriteria criteria = request.toCommonSearchCriteria();
 
         int page = request.getPage() == null ? 0 : request.getPage();
         int size = request.getSize() == null ? 20 : request.getSize();
@@ -65,7 +64,7 @@ public class GroupRewardController {
         String sortDirection = request.getSortDirection() == null ? "DESC" : request.getSortDirection();
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
-        Page<GroupRewardDto> groupRewardPage = groupRewardService.searchGroupRewards(
+        Page<GroupRewardDto> groupRewardPage = groupRewardService.getListGroupRewards(
                 criteria,
                 PageRequest.of(page, size, sort)
         );
@@ -79,9 +78,7 @@ public class GroupRewardController {
 
         log.info("Updating group reward with id: {}", groupRewardDto.getId());
 
-        Object object = groupRewardService.updateGroupReward(groupRewardDto);
-
-        return BaseResponse.success(object);
+        return BaseResponse.success(groupRewardService.updateGroupReward(groupRewardDto));
     }
 
     @DeleteMapping

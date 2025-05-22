@@ -2,6 +2,7 @@ package com.apus.demo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class GroupRewardEntity extends AbstractEntity<Long> {
+@Table(name = "group_reward")
+public class GroupRewardEntity extends AbstractEntity<Long> implements IdentifiableEntity {
 
     @Column(name = "code", length = 20, nullable = false)
     private String code;
