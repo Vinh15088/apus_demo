@@ -1,12 +1,12 @@
 package com.apus.demo.dto.request;
 
-import com.apus.demo.dto.GroupRewardSearchCriteria;
+import com.apus.demo.dto.CommonSearchCriteria;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class GroupRewardSearchRequest  {
+public class CommonSearchRequest {
 
     private String keyword;
     private Boolean isActive;
@@ -16,11 +16,10 @@ public class GroupRewardSearchRequest  {
     private String sort;
     private String sortDirection;
 
-    public GroupRewardSearchCriteria toGroupRewardSearchCriteria() {
-        return GroupRewardSearchCriteria.builder()
+    public CommonSearchCriteria toCommonSearchCriteria() {
+        return CommonSearchCriteria.builder()
                 .keyword(keyword)
                 .isActive(isActive)
                 .build();
     }
-
 }
