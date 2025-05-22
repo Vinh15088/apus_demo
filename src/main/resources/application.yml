@@ -13,7 +13,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-#      ddl-auto: update
+      ddl-auto: update
       dialect: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
@@ -27,3 +27,11 @@ openapi:
     server: http://localhost:${server.port}
     title: ${API_TITLE:DUMMY-API-TITLE}
     version: 1.0.0
+
+client:
+  resources-service:
+    url: https://resources-service.dev.apusplatform.com
+    path: /api/v1
+  product-manufactor-service:
+    url: https://product-manufactor-service.dev.apusplatform.com
+    path: /api/v1

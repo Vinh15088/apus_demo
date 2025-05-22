@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return BaseResponse.error("Validation failed");
+        return BaseResponse.error("Validation failed: " + errors);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public BaseResponse<Void> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        return BaseResponse.error("Data integrity violation: Possible duplicate key or invalid data");
+        return BaseResponse.error("Data integrity violation: Possible duplicate key or invalid data: " + ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
