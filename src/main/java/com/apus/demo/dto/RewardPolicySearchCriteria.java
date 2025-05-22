@@ -7,7 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class GroupAllowanceSearchCriteria {
+public class RewardPolicySearchCriteria {
     private String keyword;
-    private Boolean isActive;
-} 
+    private String applicableType;
+    private String type;
+}
